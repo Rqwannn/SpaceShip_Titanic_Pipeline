@@ -174,14 +174,14 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
         print(e)
         sys.exit(1)
 
-    experiment_name = "SpaceshipTitanic_Preprocessing"
+    # experiment_name = "SpaceshipTitanic_Preprocessing"
 
-    try:
-        experiment_id = mlflow.create_experiment(experiment_name)
-    except:
-        experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
+    # try:
+    #     experiment_id = mlflow.create_experiment(experiment_name)
+    # except:
+    #     experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
     
-    mlflow.set_experiment(experiment_name)
+    # mlflow.set_experiment(experiment_name)
 
     # with mlflow.start_run(run_name="Data Preprocessing and EDA"):
     # with mlflow.start_run():

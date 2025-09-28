@@ -26,7 +26,10 @@ jobs:
         shell: bash -l {0}
         run: |
           cd preprocessing
-          mlflow run . --run-name "Data Preprocessing and EDA" --env-manager=local 
+          mlflow run . \
+            --run-name "Data Preprocessing and EDA" \
+            --experiment-name "Spaceship_Titanic_Pipeline" \
+            --env-manager=local
 
       - name: List mlruns directory
         working-directory: ./preprocessing
