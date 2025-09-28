@@ -45,8 +45,8 @@ jobs:
             echo "Error: Tidak dapat menemukan MLflow run ID."
             exit 1
           fi
-          echo "run_id=${RUN_ID}" >> $GITHUB_ENV
-          echo "Run ID ditemukan: ${RUN_ID}"
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Run ID ditemukan: $RUN_ID"
       
       - name: Build Docker Image from Model
         working-directory: ./preprocessing
