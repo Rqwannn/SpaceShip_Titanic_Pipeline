@@ -19,7 +19,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.12.7"
-          environment-file: conda.yaml
+          environment-file: preprocessing/onda.yaml
 
       - name: Run preprocessing and training script
         shell: bash -l {0}
@@ -33,7 +33,6 @@ jobs:
       - name: Get latest MLflow run_id
         id: get_run_id
         run: |
-          # Perintah ini mencari direktori run terbaru di dalam mlruns/0/
           LATEST_RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
           echo "RUN_ID=${LATEST_RUN_ID}" >> "$GITHUB_ENV"
           echo "Latest run_id found: ${LATEST_RUN_ID}"
