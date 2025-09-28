@@ -183,7 +183,8 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     
     mlflow.set_experiment(experiment_name)
 
-    with mlflow.start_run(run_name="Data Preprocessing and EDA"):
+    # with mlflow.start_run(run_name="Data Preprocessing and EDA"):
+    with mlflow.start_run():
         os.makedirs(output_dir, exist_ok=True)
 
         mlflow.log_param("preprocessing_version", "2.0")

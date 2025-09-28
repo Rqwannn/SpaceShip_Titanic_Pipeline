@@ -26,7 +26,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd preprocessing
-          mlflow run . -P data_path=../spaceship_titanic_raw/data.csv --env-manager=local
+          mlflow run . --env-manager=local
 
       - name: List mlruns directory
         working-directory: ./preprocessing
