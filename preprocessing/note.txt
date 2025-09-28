@@ -1,3 +1,8 @@
 Jalankan Preprocessing seperti berikut
 
 python automate_Muhammad_Raqwan_kauthar.py ../spaceship_titanic_raw/data.csv
+
+mlflow server \
+--backend-store-uri sqlite:///mlflow.db \
+--default-artifact-root ./artifacts \
+--host 127.0.0.1 --port 5000
