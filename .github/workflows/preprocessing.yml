@@ -40,9 +40,9 @@ jobs:
         id: get_run_id
         working-directory: ./preprocessing
         run: |
-          LATEST_RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
-          echo "RUN_ID=${LATEST_RUN_ID}" >> "$GITHUB_ENV"
-          echo "Latest run_id found: ${LATEST_RUN_ID}"
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Latest run_id: $RUN_ID"
       
       - name: Build Docker Image from Model
         working-directory: ./preprocessing
