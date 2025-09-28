@@ -40,9 +40,13 @@ jobs:
         id: get_run_id
         working-directory: ./preprocessing
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Latest run_id: $RUN_ID"
+          RUN_ID=$(ls -td mlruns/*/*/ | head -n 1 | cut -d'/' -f3)
+          if [ -z "$RUN_ID" ]; then
+            echo "Error: Tidak dapat menemukan MLflow run ID."
+            exit 1
+          fi
+          echo "run_id=${RUN_ID}" >> $GITHUB_OUTPUT
+          echo "Run ID ditemukan: ${RUN_ID}"
       
       - name: Build Docker Image from Model
         working-directory: ./preprocessing
