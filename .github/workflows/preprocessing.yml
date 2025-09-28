@@ -19,7 +19,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: "3.12.7"
-          environment-file: preprocessing/onda.yaml
+          environment-file: preprocessing/conda.yaml
 
       - name: Run preprocessing and training script
         shell: bash -l {0}
