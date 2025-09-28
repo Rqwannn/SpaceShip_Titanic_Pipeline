@@ -20,24 +20,29 @@ jobs:
           auto-update-conda: true
           python-version: "3.12.7"
           environment-file: preprocessing/conda.yaml
+          activate-environment: mlflow-env
 
       - name: Run MLflow project
         shell: bash -l {0}
         run: |
-          mlflow run . -P data_path=spaceship_titanic_raw/data.csv
+          cd preprocessing
+          mlflow run . -P data_path=../spaceship_titanic_raw/data.csv
 
       - name: List mlruns directory
+        working-directory: ./preprocessing
         run: |
           ls -R mlruns
 
       - name: Get latest MLflow run_id
         id: get_run_id
+        working-directory: ./preprocessing
         run: |
           LATEST_RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
           echo "RUN_ID=${LATEST_RUN_ID}" >> "$GITHUB_ENV"
           echo "Latest run_id found: ${LATEST_RUN_ID}"
       
       - name: Build Docker Image from Model
+        working-directory: ./preprocessing
         shell: bash -l {0}
         run: |
           mlflow models build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --name "spaceship_titanic_preprocessing"
