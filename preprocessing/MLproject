@@ -1,0 +1,9 @@
+name: spaceship_titanic_preprocessing
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      data_path: {type: string, default: "../spaceship_titanic_raw/data.csv"}
+    command: "python automate_Muhammad_Raqwan_kauthar.py {data_path}"

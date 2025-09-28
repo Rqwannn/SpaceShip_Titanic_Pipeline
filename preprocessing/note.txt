@@ -1,0 +1,3 @@
+Jalankan Preprocessing seperti berikut
+
+python automate_Muhammad_Raqwan_kauthar.py ../spaceship_titanic_raw/data.csv
