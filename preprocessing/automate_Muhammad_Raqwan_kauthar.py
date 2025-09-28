@@ -289,7 +289,7 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
         print(f"Artefak berhasil disimpan di direktori '{output_dir}' dan dicatat di MLflow.")
 
 if __name__ == '__main__':
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    # mlflow.set_tracking_uri("http://127.0.0.1:5000")
     
     data_path = sys.argv[1]
     preprocess_data(input_path=data_path)
