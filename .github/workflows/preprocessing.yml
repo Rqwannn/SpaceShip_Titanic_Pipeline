@@ -52,7 +52,7 @@ jobs:
         working-directory: ./preprocessing
         shell: bash -l {0}
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "spaceship_titanic_preprocessing"
+          mlflow models build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --name "spaceship_titanic_preprocessing"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
