@@ -13,7 +13,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000/")
+import dagshub
+
+dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
+
+mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
 mlflow.set_experiment("Spaceship Titanic Modeling")
 
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
