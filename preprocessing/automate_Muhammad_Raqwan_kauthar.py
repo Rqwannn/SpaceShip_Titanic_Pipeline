@@ -188,9 +188,6 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
 
     mlflow.log_param("preprocessing_version", "2.0")
 
-    # ======================================
-    # 1. Memuat Dataset
-    # ======================================
     print("\n=== TAHAP 1: MEMUAT DATASET ===")
     df_train = pd.read_csv(input_path)
     print(f"Dataset dimuat dengan {df_train.shape[0]} baris.")
@@ -199,15 +196,9 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     log_dataframe_summary(df_train, "before_processing")
     log_eda_metrics(df_train, "before_processing")
 
-    # ======================================
-    # 2. Exploratory Data Analysis (EDA)
-    # ======================================
     print("\n=== TAHAP 2: EDA VISUAL ===")
     perform_eda_and_log(df_train)
 
-    # ======================================
-    # 3. Menangani Nilai yang Hilang
-    # ======================================
     print("\n=== TAHAP 3: MENANGANI NILAI HILANG ===")
     df_train.dropna(subset=['PassengerId', 'Name', 'Transported'], inplace=True)
     
@@ -223,9 +214,6 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     print("Nilai yang hilang telah ditangani.")
     mlflow.log_param("rows_after_na_drop", df_train.shape[0])
 
-    # ======================================
-    # 4. Rekayasa Fitur
-    # ======================================
     print("\n=== TAHAP 4: REKAYASA FITUR ===")
     df_train['GroupId'] = df_train['PassengerId'].apply(lambda x: x.split('_')[0])
     df_train['GroupSize'] = df_train.groupby('GroupId')['PassengerId'].transform('count')
@@ -242,9 +230,6 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     
     print("Rekayasa fitur selesai.")
 
-    # ======================================
-    # 5. Normalisasi dan Encoding
-    # ======================================
     print("\n=== TAHAP 5: NORMALISASI DAN ENCODING ===")
     df_train.drop(columns=["PassengerId", "GroupId", "Name", "Cabin"], inplace=True)
     
@@ -268,9 +253,6 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     log_dataframe_summary(df_train, "after_processing")
     log_eda_metrics(df_train, "after_processing")
 
-    # ======================================
-    # 6. Menyimpan Artefak
-    # ======================================
     print("\n=== TAHAP 6: MENYIMPAN ARTEFAK ===")
     processed_data_path = os.path.join(output_dir, "spaceship_titanic_processed.csv")
     df_train.to_csv(processed_data_path, index=False)
