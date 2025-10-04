@@ -58,7 +58,8 @@ mlflow.sklearn.autolog(
     log_input_examples=True,
     log_model_signatures=True,
     log_models=True,
-    silent=True  
+    silent=True,
+    artifact_path="model",
 )
 
 print("Building Stacking Classifier...")
