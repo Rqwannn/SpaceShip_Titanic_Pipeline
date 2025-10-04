@@ -124,6 +124,13 @@ mlflow.sklearn.log_model(
     input_example=input_example
 )
 
+mlflow.sklearn.log_model(
+    sk_model=best_model,
+    artifact_path="best_estimator",
+    signature=signature,
+    input_example=input_example
+)
+
 train_acc, train_cer = create_report(y_train, y_train_predict, "Training Set")
 test_acc, test_cer = create_report(y_test, y_test_predict, "Test Set")
 
