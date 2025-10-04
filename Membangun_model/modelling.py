@@ -9,11 +9,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 
-import dagshub
+try:
+    import dagshub
+    dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
+    mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
+    print("Using remote MLflow tracking (DagHub)")
+except Exception as e:
+    print(f"Warning: Failed to initialize DagHub: {e}")
+    print("Using local MLflow tracking")
 
-dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
-
-mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
 mlflow.set_experiment("Spaceship Titanic Modeling")
 
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
