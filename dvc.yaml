@@ -1,0 +1,18 @@
+stages:
+  preprocess:
+    wdir: preprocessing
+    cmd: python automate_Muhammad_Raqwan_kauthar.py ../spaceship_titanic_raw/data.csv
+    deps:
+      - automate_Muhammad_Raqwan_kauthar.py
+      - ../spaceship_titanic_raw/data.csv
+    outs:
+      - artifacts/local/spaceship_titanic_processed.csv
+
+  train:
+    wdir: Membangun_model
+    cmd: python modelling_tuning.py
+    deps:
+      - modelling_tuning.py
+      - spaceship_titanic_preprocessing.csv
+    outs:
+      - artifacts/local/stacking_model.pkl

@@ -1,0 +1,35 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python automate_Muhammad_Raqwan_kauthar.py 
+      ../spaceship_titanic_raw/data.csv
+    deps:
+    - path: ../spaceship_titanic_raw/data.csv
+      hash: md5
+      md5: 8cf8d6d39aecf7cc6466eb79b0ed6e1b
+      size: 805421
+    - path: automate_Muhammad_Raqwan_kauthar.py
+      hash: md5
+      md5: e6fd8821935a60b269dee80c23c8f849
+      size: 11338
+    outs:
+    - path: artifacts/local/spaceship_titanic_processed.csv
+      hash: md5
+      md5: 239e56892e8c1eb4f80abbe73e2b00cb
+      size: 1373256
+  train:
+    cmd: python modelling_tuning.py
+    deps:
+    - path: modelling_tuning.py
+      hash: md5
+      md5: ed6203bd63848f7cc933e54d18416896
+      size: 6766
+    - path: spaceship_titanic_preprocessing.csv
+      hash: md5
+      md5: 7554a25635b144a1fcb1ecef5ad8090c
+      size: 1080623
+    outs:
+    - path: artifacts/local/stacking_model.pkl
+      hash: md5
+      md5: 9a7b03534accd9431e1c8c7f390e9455
+      size: 1317178

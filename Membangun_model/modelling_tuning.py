@@ -12,8 +12,9 @@ from mlflow.models import infer_signature
 import matplotlib.pyplot as plt
 import seaborn as sns
 import re
-
 import dagshub
+import joblib 
+import os    
 
 dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
 
@@ -24,7 +25,6 @@ data = pd.read_csv("spaceship_titanic_preprocessing.csv")
 X = data.drop(columns=['Transported', "VIP", 'AgeGroup', 'NoSpend', 'SoloTraveler', 'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep'])
 y = data['Transported']
 
-# FIX: Clean column names untuk LightGBM
 def clean_column_names(df):
     """Clean column names by removing special characters"""
     df = df.copy()
@@ -105,7 +105,6 @@ with mlflow.start_run() as run:
     print(grid_search.best_params_)
     mlflow.log_params(grid_search.best_params_)
     
-    # Log final estimator parameters
     mlflow.log_param("final_estimator_solver", "liblinear")
     mlflow.log_param("final_estimator_max_iter", 10000)
     
@@ -169,7 +168,30 @@ with mlflow.start_run() as run:
     plt.savefig(confusion_matrix_train_path, dpi=300, bbox_inches='tight')
     mlflow.log_artifact(confusion_matrix_train_path)
     plt.close()
+
+    registered_model_name = "Spaceship_Titanic_StackingModel"
+
+    print(f"\nMendaftarkan model dengan nama: {registered_model_name}")
+
+    model_uri = f"runs:/{run.info.run_id}/model"
+
+    mlflow.register_model(
+        model_uri=model_uri,
+        name=registered_model_name
+    )
+
+    print("Model berhasil didaftarkan ke Registry.")
     
+    print("\nSaving model locally...")
+
+    local_dir = "artifacts/local"
+    
+    os.makedirs(local_dir, exist_ok=True)
+    local_model_path = os.path.join(local_dir, "stacking_model.pkl")
+    
+    joblib.dump(best_model, local_model_path)
+    print(f"Model juga disimpan secara lokal di: {local_model_path}")
+
     print(f"\n{'='*50}")
     print(f"Untuk melihat hasil, cek run ID: {run.info.run_id}")
     print('='*50)
