@@ -49,12 +49,8 @@ jobs:
       - name: Build Docker Model
         working-directory: ./MLProject
         shell: bash -l {0}
-        env:
-          MLFLOW_TRACKING_URI: "https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/"
-          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
-          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: |
-          mlflow models build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --name "spaceship_titanic_modelling"
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "spaceship_titanic_modelling" 
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
