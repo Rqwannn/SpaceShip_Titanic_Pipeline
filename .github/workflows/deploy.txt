@@ -1,0 +1,27 @@
+name: CD - Deploy Model to Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }} 
+
+          script: |
+            docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/spaceship_titanic_modelling:latest
+
+            docker stop spaceship_titanic_container || true
+            docker rm spaceship_titanic_container || true
+
+            docker run -d -p 8080:5000 --name spaceship_titanic_container ${{ secrets.DOCKER_HUB_USERNAME }}/spaceship_titanic_modelling:latest

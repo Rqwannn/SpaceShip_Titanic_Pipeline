@@ -1,0 +1,3 @@
+Index(['HomePlanet', 'Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa',
+       'VRDeck', 'Deck', 'CabinNum', 'Side', 'TotalSpend'],
+      dtype='object')

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/raqwan/Documents/Dicoding/SMSML_Muhammad%20Raqwan%20Kauthar/MLProject/mlruns/0/80cd9f9ac68a40f3861a5ccbf42b2db9/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 80cd9f9ac68a40f3861a5ccbf42b2db9
+run_name: magnificent-bird-917
+run_uuid: 80cd9f9ac68a40f3861a5ccbf42b2db9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759592561185
+status: 1
+tags: []
+user_id: raqwan

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/raqwan/Documents/Dicoding/SMSML_Muhammad%20Raqwan%20Kauthar/MLProject/mlruns/0/f3f52750b6a54b72aa2768df5e0dcce5/artifacts
+end_time: 1759590881269
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f3f52750b6a54b72aa2768df5e0dcce5
+run_name: nosy-crab-173
+run_uuid: f3f52750b6a54b72aa2768df5e0dcce5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759590628365
+status: 4
+tags: []
+user_id: raqwan
