@@ -57,12 +57,8 @@ def create_report(y_true, y_pred, dataset_name="Dataset"):
 mlflow.sklearn.autolog(
     log_input_examples=True,
     log_model_signatures=True,
-    log_models=True,
+    log_models=False,
     silent=True,
-)
-
-mlflow.log_artifact(
-    artifact_path="model"
 )
 
 print("Building Stacking Classifier...")
@@ -117,6 +113,16 @@ mlflow.log_param("final_estimator_max_iter", 10000)
 
 y_train_predict = best_model.predict(X_train)
 y_test_predict = best_model.predict(X_test)
+
+input_example = X_train.head(5)
+signature = infer_signature(X_train, best_model.predict(X_train))
+
+mlflow.sklearn.log_model(
+    sk_model=best_model,
+    artifact_path="model", # Ini akan membuat folder 'model'
+    signature=signature,
+    input_example=input_example
+)
 
 train_acc, train_cer = create_report(y_train, y_train_predict, "Training Set")
 test_acc, test_cer = create_report(y_test, y_test_predict, "Test Set")
