@@ -32,8 +32,6 @@ jobs:
         run: |
           cd preprocessing
           mlflow run . \
-            --run-name "Data Preprocessing and EDA" \
-            --experiment-name "Spaceship_Titanic_Pipeline" \
             --env-manager=local
 
       - name: List mlruns directory
