@@ -24,6 +24,7 @@ jobs:
           activate-environment: mlflow-env
           
       - name: Run mlflow project
+        shell: bash -l {0}
         run: |
           cd MLProject
           mlflow run . --env-manager=local
