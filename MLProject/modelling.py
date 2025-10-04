@@ -55,8 +55,8 @@ def create_report(y_true, y_pred, dataset_name="Dataset"):
     return accuracy, cer
 
 mlflow.sklearn.autolog(
-    log_input_examples=True,
-    log_model_signatures=True,
+    log_input_examples=False,
+    log_model_signatures=False,
     log_models=False,
     silent=True,
 )
@@ -119,7 +119,7 @@ signature = infer_signature(X_train, best_model.predict(X_train))
 
 mlflow.sklearn.log_model(
     sk_model=best_model,
-    artifact_path="model", # Ini akan membuat folder 'model'
+    artifact_path="model",
     signature=signature,
     input_example=input_example
 )
