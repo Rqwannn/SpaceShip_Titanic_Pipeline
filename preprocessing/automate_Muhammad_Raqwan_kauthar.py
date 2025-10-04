@@ -183,96 +183,98 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     
     # mlflow.set_experiment(experiment_name)
 
-    # with mlflow.start_run(run_name="Data Preprocessing and EDA"):
-    os.makedirs(output_dir, exist_ok=True)
+    with mlflow.start_run():
+        os.makedirs(output_dir, exist_ok=True)
 
-    mlflow.log_param("preprocessing_version", "2.0")
+        mlflow.log_param("preprocessing_version", "2.0")
 
-    print("\n=== TAHAP 1: MEMUAT DATASET ===")
-    df_train = pd.read_csv(input_path)
-    print(f"Dataset dimuat dengan {df_train.shape[0]} baris.")
-    mlflow.log_param("initial_rows", df_train.shape[0])
-    
-    log_dataframe_summary(df_train, "before_processing")
-    log_eda_metrics(df_train, "before_processing")
-
-    print("\n=== TAHAP 2: EDA VISUAL ===")
-    perform_eda_and_log(df_train)
-
-    print("\n=== TAHAP 3: MENANGANI NILAI HILANG ===")
-    df_train.dropna(subset=['PassengerId', 'Name', 'Transported'], inplace=True)
-    
-    numeric_cols_to_fill = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
-    for col in numeric_cols_to_fill:
-        df_train[col] = df_train[col].fillna(df_train[col].median())
-
-    categorical_cols_missing = ['HomePlanet', 'CryoSleep', 'Cabin', 'Destination', 'VIP']
-    for col in categorical_cols_missing:
-        fill_value = df_train[col].mode()[0] if not df_train[col].mode().empty else "Unknown"
-        df_train[col] = df_train[col].fillna(fill_value).astype("string")
-    
-    print("Nilai yang hilang telah ditangani.")
-    mlflow.log_param("rows_after_na_drop", df_train.shape[0])
-
-    print("\n=== TAHAP 4: REKAYASA FITUR ===")
-    df_train['GroupId'] = df_train['PassengerId'].apply(lambda x: x.split('_')[0])
-    df_train['GroupSize'] = df_train.groupby('GroupId')['PassengerId'].transform('count')
-    df_train['SoloTraveler'] = (df_train['GroupSize'] == 1).astype(int)
-
-    df_train[['Deck','CabinNum','Side']] = df_train['Cabin'].str.split('/', expand=True)
-    df_train['CabinNum'] = pd.to_numeric(df_train['CabinNum'], errors='coerce').fillna(0)
-
-    df_train['TotalSpend'] = df_train[['RoomService','FoodCourt','ShoppingMall','Spa','VRDeck']].sum(axis=1)
-    df_train['NoSpend'] = (df_train['TotalSpend'] == 0).astype(int)
-
-    df_train['AgeGroup'] = pd.cut(df_train['Age'], bins=[0, 12, 18, 25, 40, 60, 80],
-                            labels=['Child','Teen','YoungAdult','Adult','MiddleAge','Senior'])
-    
-    print("Rekayasa fitur selesai.")
-
-    print("\n=== TAHAP 5: NORMALISASI DAN ENCODING ===")
-    df_train.drop(columns=["PassengerId", "GroupId", "Name", "Cabin"], inplace=True)
-    
-    numeric_cols_to_scale = ["Age", "RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck", "NoSpend", "TotalSpend", "CabinNum", "SoloTraveler", "GroupSize"]
-    scalers = {}
-    for col in numeric_cols_to_scale:
-        df_train[col] = np.log1p(df_train[col])
-        scaler = RobustScaler()
-        df_train[col] = scaler.fit_transform(df_train[[col]])
-        scalers[col] = scaler
-
-    categorical_cols_to_encode = [col for col in df_train.columns if df_train[col].dtype == 'object' or pd.api.types.is_categorical_dtype(df_train[col])]
-    label_encoders = {}
-    for col in categorical_cols_to_encode:
-        encoder = LabelEncoder()
-        df_train[col] = encoder.fit_transform(df_train[col].astype(str))
-        label_encoders[col] = encoder
+        print("\n=== TAHAP 1: MEMUAT DATASET ===")
+        df_train = pd.read_csv(input_path)
+        print(f"Dataset dimuat dengan {df_train.shape[0]} baris.")
+        mlflow.log_param("initial_rows", df_train.shape[0])
         
-    print("Normalisasi dan encoding selesai.")
+        log_dataframe_summary(df_train, "before_processing")
+        log_eda_metrics(df_train, "before_processing")
+
+        print("\n=== TAHAP 2: EDA VISUAL ===")
+        perform_eda_and_log(df_train)
+
+        print("\n=== TAHAP 3: MENANGANI NILAI HILANG ===")
+        df_train.dropna(subset=['PassengerId', 'Name', 'Transported'], inplace=True)
         
-    log_dataframe_summary(df_train, "after_processing")
-    log_eda_metrics(df_train, "after_processing")
+        numeric_cols_to_fill = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
+        for col in numeric_cols_to_fill:
+            df_train[col] = df_train[col].fillna(df_train[col].median())
 
-    print("\n=== TAHAP 6: MENYIMPAN ARTEFAK ===")
-    processed_data_path = os.path.join(output_dir, "spaceship_titanic_processed.csv")
-    df_train.to_csv(processed_data_path, index=False)
-    mlflow.log_artifact(processed_data_path, "processed_data")
+        categorical_cols_missing = ['HomePlanet', 'CryoSleep', 'Cabin', 'Destination', 'VIP']
+        for col in categorical_cols_missing:
+            fill_value = df_train[col].mode()[0] if not df_train[col].mode().empty else "Unknown"
+            df_train[col] = df_train[col].fillna(fill_value).astype("string")
+        
+        print("Nilai yang hilang telah ditangani.")
+        mlflow.log_param("rows_after_na_drop", df_train.shape[0])
 
-    for col, scaler_obj in scalers.items():
-        path = os.path.join(output_dir, f"{col}_scaler.pkl")
-        joblib.dump(scaler_obj, path)
-        mlflow.log_artifact(path, "models/scalers")
+        print("\n=== TAHAP 4: REKAYASA FITUR ===")
+        df_train['GroupId'] = df_train['PassengerId'].apply(lambda x: x.split('_')[0])
+        df_train['GroupSize'] = df_train.groupby('GroupId')['PassengerId'].transform('count')
+        df_train['SoloTraveler'] = (df_train['GroupSize'] == 1).astype(int)
 
-    for col, encoder_obj in label_encoders.items():
-        path = os.path.join(output_dir, f"{col}_encoder.pkl")
-        joblib.dump(encoder_obj, path)
-        mlflow.log_artifact(path, "models/encoders")
-    
-    print(f"Artefak berhasil disimpan di direktori '{output_dir}' dan dicatat di MLflow.")
+        df_train[['Deck','CabinNum','Side']] = df_train['Cabin'].str.split('/', expand=True)
+        df_train['CabinNum'] = pd.to_numeric(df_train['CabinNum'], errors='coerce').fillna(0)
+
+        df_train['TotalSpend'] = df_train[['RoomService','FoodCourt','ShoppingMall','Spa','VRDeck']].sum(axis=1)
+        df_train['NoSpend'] = (df_train['TotalSpend'] == 0).astype(int)
+
+        df_train['AgeGroup'] = pd.cut(df_train['Age'], bins=[0, 12, 18, 25, 40, 60, 80],
+                                labels=['Child','Teen','YoungAdult','Adult','MiddleAge','Senior'])
+        
+        print("Rekayasa fitur selesai.")
+
+        print("\n=== TAHAP 5: NORMALISASI DAN ENCODING ===")
+        df_train.drop(columns=["PassengerId", "GroupId", "Name", "Cabin"], inplace=True)
+        
+        numeric_cols_to_scale = ["Age", "RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck", "NoSpend", "TotalSpend", "CabinNum", "SoloTraveler", "GroupSize"]
+        scalers = {}
+        for col in numeric_cols_to_scale:
+            df_train[col] = np.log1p(df_train[col])
+            scaler = RobustScaler()
+            df_train[col] = scaler.fit_transform(df_train[[col]])
+            scalers[col] = scaler
+
+        categorical_cols_to_encode = [col for col in df_train.columns if df_train[col].dtype == 'object' or pd.api.types.is_categorical_dtype(df_train[col])]
+        label_encoders = {}
+        for col in categorical_cols_to_encode:
+            encoder = LabelEncoder()
+            df_train[col] = encoder.fit_transform(df_train[col].astype(str))
+            label_encoders[col] = encoder
+            
+        print("Normalisasi dan encoding selesai.")
+            
+        log_dataframe_summary(df_train, "after_processing")
+        log_eda_metrics(df_train, "after_processing")
+
+        print("\n=== TAHAP 6: MENYIMPAN ARTEFAK ===")
+        processed_data_path = os.path.join(output_dir, "spaceship_titanic_processed.csv")
+        df_train.to_csv(processed_data_path, index=False)
+        mlflow.log_artifact(processed_data_path, "processed_data")
+
+        for col, scaler_obj in scalers.items():
+            path = os.path.join(output_dir, f"{col}_scaler.pkl")
+            joblib.dump(scaler_obj, path)
+            mlflow.log_artifact(path, "models/scalers")
+
+        for col, encoder_obj in label_encoders.items():
+            path = os.path.join(output_dir, f"{col}_encoder.pkl")
+            joblib.dump(encoder_obj, path)
+            mlflow.log_artifact(path, "models/encoders")
+        
+        print(f"Artefak berhasil disimpan di direktori '{output_dir}' dan dicatat di MLflow.")
 
 if __name__ == '__main__':
     import dagshub
     dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
+
+    mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
     
     data_path = sys.argv[1]
     preprocess_data(input_path=data_path, output_dir="artifacts/local")
