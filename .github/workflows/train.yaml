@@ -1,4 +1,4 @@
-name: CI/CD MLflow with SageMaker Deployment
+name: CI/CD SpaceShip Titanic Training
 
 on:
   push:
