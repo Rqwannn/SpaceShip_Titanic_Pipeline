@@ -22,8 +22,8 @@ stages:
     deps:
     - path: modelling_tuning.py
       hash: md5
-      md5: ed6203bd63848f7cc933e54d18416896
-      size: 6766
+      md5: 21f575825dac3cafbfee95e6eed20b30
+      size: 6973
     - path: spaceship_titanic_preprocessing.csv
       hash: md5
       md5: 7554a25635b144a1fcb1ecef5ad8090c
@@ -31,5 +31,5 @@ stages:
     outs:
     - path: artifacts/local/stacking_model.pkl
       hash: md5
-      md5: 9a7b03534accd9431e1c8c7f390e9455
+      md5: 0bfda56435e9bd84a1c24e386c14edc3
       size: 1317178
