@@ -55,9 +55,9 @@ def create_report(y_true, y_pred, dataset_name="Dataset"):
     return accuracy, cer
 
 mlflow.sklearn.autolog(
-    log_input_examples=True,
-    log_model_signatures=True,
-    log_models=True,
+    log_input_examples=False,
+    log_model_signatures=False,
+    log_models=False,
     silent=True,
 )
 
