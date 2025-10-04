@@ -10,8 +10,8 @@ stages:
       size: 805421
     - path: automate_Muhammad_Raqwan_kauthar.py
       hash: md5
-      md5: ada6584797fe4ab0ce3161fe2c500e5f
-      size: 11704
+      md5: af113db3032e5638250de685ad383c10
+      size: 12122
     outs:
     - path: artifacts/local/spaceship_titanic_processed.csv
       hash: md5

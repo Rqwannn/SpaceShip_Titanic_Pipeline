@@ -180,9 +180,8 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
         mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
         print("Using remote MLflow tracking (DagHub)")
     except Exception as e:
-        print(f"Warning: Failed to initialize DagHub: {e}")
+        print(f"Warning: Failed to initialize DagHub: {str(e)[:100]}")
         print("Using local MLflow tracking")
-        mlflow.set_tracking_uri("file://./mlruns")
 
     experiment_name = "Spaceship_Titanic_Preprocessing"
 
@@ -196,14 +195,11 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     try:
         mlflow.start_run(run_name="Data Preprocessing and EDA")
     except Exception as e:
-        print(f"Warning: Failed to start remote run: {e}")
+        print(f"Warning: Failed to start remote run: {str(e)[:100]}")
         print("Switching to local tracking...")
-        mlflow.set_tracking_uri("file://./mlruns")
-        mlflow.start_run(run_name="Data Preprocessing and EDA")
 
     try:
         os.makedirs(output_dir, exist_ok=True)
-
         mlflow.log_param("preprocessing_version", "2.0")
 
         print("\n=== TAHAP 1: MEMUAT DATASET ===")
