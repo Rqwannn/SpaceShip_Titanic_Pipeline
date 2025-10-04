@@ -61,6 +61,10 @@ mlflow.sklearn.autolog(
     silent=True,
 )
 
+mlflow.log_artifact(
+    artifact_path="model"
+)
+
 print("Building Stacking Classifier...")
 
 base_estimators = [
@@ -113,14 +117,6 @@ mlflow.log_param("final_estimator_max_iter", 10000)
 
 y_train_predict = best_model.predict(X_train)
 y_test_predict = best_model.predict(X_test)
-
-input_example = X_train[0:5]
-
-mlflow.sklearn.log_model(
-    sk_model=best_model,
-    artifact_path="model",
-    input_example=input_example
-)
 
 train_acc, train_cer = create_report(y_train, y_train_predict, "Training Set")
 test_acc, test_cer = create_report(y_test, y_test_predict, "Test Set")
