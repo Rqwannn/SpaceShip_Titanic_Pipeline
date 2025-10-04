@@ -33,6 +33,11 @@ jobs:
         run: |
           cd MLProject
           mlflow run . --env-manager=local
+
+      - name: List mlruns directory
+        working-directory: ./MLProject
+        run: |
+          ls -R mlruns
       
       - name: Get latest MLflow run_id
         working-directory: ./MLProject
@@ -43,6 +48,7 @@ jobs:
           
       - name: Build Docker Model
         working-directory: ./MLProject
+        shell: bash -l {0}
         run: |
           mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "spaceship_titanic_modelling" 
 
