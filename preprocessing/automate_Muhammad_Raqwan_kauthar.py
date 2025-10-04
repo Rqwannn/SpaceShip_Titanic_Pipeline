@@ -11,11 +11,6 @@ import io
 import sys
 from typing import Text, Dict
 
-import dagshub
-dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
-
-mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
-
 def validate_inputs(file_path: Text):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Error: File data tidak ditemukan di '{file_path}'")
@@ -179,6 +174,16 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
         print(e)
         sys.exit(1)
 
+    try:
+        import dagshub
+        dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
+        mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
+        print("Using remote MLflow tracking (DagHub)")
+    except Exception as e:
+        print(f"Warning: Failed to initialize DagHub: {e}")
+        print("Using local MLflow tracking")
+        mlflow.set_tracking_uri("file://./mlruns")
+
     experiment_name = "Spaceship_Titanic_Preprocessing"
 
     try:
@@ -188,7 +193,15 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
     
     mlflow.set_experiment(experiment_name)
 
-    with mlflow.start_run(run_name="Data Preprocessing and EDA"):
+    try:
+        mlflow.start_run(run_name="Data Preprocessing and EDA")
+    except Exception as e:
+        print(f"Warning: Failed to start remote run: {e}")
+        print("Switching to local tracking...")
+        mlflow.set_tracking_uri("file://./mlruns")
+        mlflow.start_run(run_name="Data Preprocessing and EDA")
+
+    try:
         os.makedirs(output_dir, exist_ok=True)
 
         mlflow.log_param("preprocessing_version", "2.0")
@@ -274,6 +287,9 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
             mlflow.log_artifact(path, "models/encoders")
         
         print(f"Artefak berhasil disimpan di direktori '{output_dir}' dan dicatat di MLflow.")
+    
+    finally:
+        mlflow.end_run()
 
 if __name__ == '__main__':
     data_path = sys.argv[1]
