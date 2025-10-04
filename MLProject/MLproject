@@ -1,4 +1,4 @@
-name: spaceship_titanic_preprocessing
+name: spaceship_titanic_modelling
 
 conda_env: conda.yaml
 
