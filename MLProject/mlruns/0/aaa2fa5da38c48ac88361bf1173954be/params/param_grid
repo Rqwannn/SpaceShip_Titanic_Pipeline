@@ -1,0 +1,1 @@
+{'xgb__n_estimators': [50], 'xgb__max_depth': [3], 'xgb__learning_rate': [0.1], 'lgbm__n_estimators': [50], 'lgbm__max_depth': [3], 'cat__iterations': [50], 'cat__depth': [4]}
