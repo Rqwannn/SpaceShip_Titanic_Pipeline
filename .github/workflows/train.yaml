@@ -106,15 +106,15 @@ jobs:
         run: |
           cd MLProject
           export MLFLOW_TRACKING_URI=./mlruns
-          mlflow experiments create -n "spaceship-titanic-modeling" --artifact-location ./mlruns || true
+          mlflow experiments create -n "Spaceship Titanic Modeling" --artifact-location ./mlruns || true
       
       - name: Run mlflow project
         env:
           MLFLOW_TRACKING_URI: ./mlruns
-          MLFLOW_EXPERIMENT_NAME: spaceship-titanic-modeling
+          MLFLOW_EXPERIMENT_NAME: "Spaceship Titanic Modeling"
         run: |
           cd MLProject
-          mlflow run . --env-manager=local --experiment-name "spaceship-titanic-modeling"
+          mlflow run . --env-manager=local --experiment-name "Spaceship Titanic Modeling"
       
       - name: List mlruns directory
         working-directory: ./MLProject
