@@ -1,0 +1,15 @@
+digest: 9e689d1b
+name: dataset
+profile: '{"num_rows": 5, "num_elements": 60}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "Unnamed__0", "required":
+  true}, {"type": "double", "name": "HomePlanet", "required": true}, {"type": "double",
+  "name": "Age", "required": true}, {"type": "double", "name": "RoomService", "required":
+  true}, {"type": "double", "name": "FoodCourt", "required": true}, {"type": "double",
+  "name": "ShoppingMall", "required": true}, {"type": "double", "name": "Spa", "required":
+  true}, {"type": "double", "name": "VRDeck", "required": true}, {"type": "double",
+  "name": "Deck", "required": true}, {"type": "double", "name": "CabinNum", "required":
+  true}, {"type": "double", "name": "Side", "required": true}, {"type": "double",
+  "name": "TotalSpend", "required": true}]}'
+source: '{"tags": {"mlflow.user": "raqwan", "mlflow.source.name": "modelling.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "fd945a2b2436e4a2122ab9fef3ad7ba544c007a4"}}'
+source_type: code

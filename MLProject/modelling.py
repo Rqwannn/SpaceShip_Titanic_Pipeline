@@ -17,9 +17,9 @@ import time
 import os
 
 mlflow.sklearn.autolog(
-    log_input_examples=False,
-    log_model_signatures=False,
-    log_models=False,
+    log_input_examples=True,
+    log_model_signatures=True,
+    log_models=True,
     silent=True  
 )
 

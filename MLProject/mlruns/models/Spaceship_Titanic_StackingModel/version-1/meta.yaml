@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1759631082313
+current_stage: None
+description: null
+last_updated_timestamp: 1759631082313
+name: Spaceship_Titanic_StackingModel
+run_id: 3c09a15cb75d4909a10211216f25190a
+run_link: null
+source: file:///Users/raqwan/Documents/Dicoding/SMSML_Muhammad%20Raqwan%20Kauthar/MLProject/mlruns/0/3c09a15cb75d4909a10211216f25190a/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///Users/raqwan/Documents/Dicoding/SMSML_Muhammad%20Raqwan%20Kauthar/MLProject/mlruns/0/3c09a15cb75d4909a10211216f25190a/artifacts/model
+user_id: null
+version: 1
