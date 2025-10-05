@@ -54,7 +54,12 @@ def create_report(y_true, y_pred, dataset_name="Dataset"):
     
     return accuracy, cer
 
-mlflow.sklearn.autolog(disable=True)
+mlflow.sklearn.autolog(
+    log_input_examples=False,
+    log_model_signatures=False,
+    log_models=False,
+    silent=True,
+)
 
 print("Building Stacking Classifier...")
 
