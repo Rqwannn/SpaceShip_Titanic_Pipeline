@@ -23,9 +23,6 @@ active_run = mlflow.active_run()
 if active_run is None:
     print("No active run detected, starting new run...")
 
-run_id = mlflow.active_run().info.run_id
-print(f"Active run ID: {run_id}")
-
 mlflow.sklearn.autolog(disable=True)
 
 print("\nLoading data...")
