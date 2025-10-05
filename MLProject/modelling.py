@@ -23,7 +23,12 @@ active_run = mlflow.active_run()
 if active_run is None:
     print("No active run detected, starting new run...")
 
-mlflow.sklearn.autolog(disable=True)
+    mlflow.sklearn.autolog(
+        log_input_examples=False,
+        log_model_signatures=False,
+        log_models=False,
+        silent=True  
+    )
 
 print("\nLoading data...")
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
