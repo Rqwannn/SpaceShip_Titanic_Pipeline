@@ -1,5 +1,4 @@
 name: CI/CD SpaceShip Titanic Training
-
 on:
   push:
     branches:
@@ -7,7 +6,6 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,23 +13,37 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
       
+      - name: Clean mlruns directory
+        run: |
+          cd MLProject
+          rm -rf mlruns
+          mkdir -p mlruns
+      
       - name: Set up Python 3.12.7
         uses: actions/setup-python@v4
         with:
           python-version: "3.12.7"
-
+      
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mlflow==2.22.2
-          pip install scikit-learn pandas
-          pip install xgboost lightgbm catboost matplotlib seaborn joblib
-          
-      - name: Run mlflow project
+          pip install mlflow==2.22.0
+          pip install scikit-learn pandas xgboost lightgbm catboost matplotlib seaborn joblib
+      
+      - name: Create mlflow experiment
         run: |
           cd MLProject
-          mlflow run . --env-manager=local
-
+          export MLFLOW_TRACKING_URI=./mlruns
+          mlflow experiments create -n "spaceship_titanic" --artifact-location ./mlruns || true
+      
+      - name: Run mlflow project
+        env:
+          MLFLOW_TRACKING_URI: ./mlruns
+          MLFLOW_EXPERIMENT_NAME: spaceship_titanic
+        run: |
+          cd MLProject
+          mlflow run . --env-manager=local --experiment-name spaceship_titanic
+      
       - name: List mlruns directory
         working-directory: ./MLProject
         run: |
@@ -40,26 +52,28 @@ jobs:
       - name: Get latest MLflow run_id
         working-directory: ./MLProject
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          RUN_ID=$(ls -td mlruns/*/*/meta.yaml | head -n 1 | cut -d'/' -f3)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
-          
+      
       - name: Build Docker Model
         working-directory: ./MLProject
+        env:
+          MLFLOW_TRACKING_URI: ./mlruns
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "spaceship_titanic_modelling" 
-
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "spaceship_titanic_modelling"
+      
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
+      
       - name: Tag Docker Image
         working-directory: ./MLProject
         run: |
           docker tag spaceship_titanic_modelling ${{ secrets.DOCKER_HUB_USERNAME }}/spaceship_titanic_modelling:latest
-
+      
       - name: Push Docker Image
         working-directory: ./MLProject
         run: |

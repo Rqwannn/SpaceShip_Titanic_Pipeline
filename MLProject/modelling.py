@@ -16,6 +16,18 @@ import joblib
 import time
 import os
 
+current_dir = os.getcwd()
+mlruns_path = os.path.join(current_dir, 'mlruns')
+os.makedirs(mlruns_path, exist_ok=True)
+
+os.environ['MLFLOW_TRACKING_URI'] = mlruns_path
+os.environ['MLFLOW_ARTIFACT_ROOT'] = mlruns_path
+
+mlflow.set_tracking_uri(mlruns_path)
+
+print(f"Working directory: {current_dir}")
+print(f"MLflow tracking URI: {mlflow.get_tracking_uri()}")
+
 mlflow.sklearn.autolog(
     log_input_examples=True,
     log_model_signatures=True,
