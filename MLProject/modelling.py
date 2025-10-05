@@ -13,11 +13,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 import joblib 
+import time
 import os
-
-print("="*60)
-print("SPACESHIP TITANIC MODELING - MLproject Version")
-print("="*60)
 
 try:
     import dagshub
@@ -29,8 +26,13 @@ except Exception as e:
     print(f"DagHub init failed, using local tracking")
     USE_DAGSHUB = False
 
-if mlflow.active_run() is None:
-    raise RuntimeError("No active MLflow run! This script must be run via 'mlflow run .'")
+time.sleep(0.5)
+
+active_run = mlflow.active_run()
+if active_run is None:
+    print("No active run detected, starting new run...")
+    mlflow.start_run()
+    active_run = mlflow.active_run()
 
 run_id = mlflow.active_run().info.run_id
 print(f"Active run ID: {run_id}")
@@ -132,10 +134,6 @@ y_test_predict = best_model.predict(X_test)
 input_example = X_train.head(5)
 signature = infer_signature(X_train, best_model.predict(X_train))
 
-print("\n" + "="*60)
-print("LOGGING MODELS TO MLFLOW")
-print("="*60)
-
 try:
     print("Logging GridSearchCV model to 'model' artifact path...")
     model_info = mlflow.sklearn.log_model(
@@ -163,9 +161,6 @@ try:
 except Exception as e:
     print(f"WARNING: Could not log best_estimator: {e}")
 
-print("="*60)
-
-print("\nLogging metrics...")
 train_acc, train_cer = create_report(y_train, y_train_predict, "Training Set")
 test_acc, test_cer = create_report(y_test, y_test_predict, "Test Set")
 
@@ -175,13 +170,11 @@ mlflow.log_metric("test_accuracy", test_acc)
 mlflow.log_metric("test_classification_error_rate", test_cer)
 mlflow.log_metric("best_cv_score", grid_search.best_score_)
 
-print("\nLogging classification reports...")
 train_report = classification_report(y_train, y_train_predict)
 test_report = classification_report(y_test, y_test_predict)
 mlflow.log_text(train_report, "train_classification_report.txt")
 mlflow.log_text(test_report, "test_classification_report.txt")
 
-print("\nGenerating Feature Importance Plot...")
 cat = best_model.named_estimators_['cat']
 feat_importance = cat.get_feature_importance()
 
