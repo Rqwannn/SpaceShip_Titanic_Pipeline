@@ -25,7 +25,11 @@ except Exception as e:
     print(f"Warning: Failed to initialize DagHub: {str(e)[:100]}")
     print("Using local MLflow tracking")
     
-mlflow.set_experiment("Spaceship Titanic Modeling")
+try:
+    mlflow.start_run(run_name="Modelling & Evaluasi")
+except Exception as e:
+    print(f"Warning: Failed to start remote run: {str(e)[:100]}")
+    print("Switching to local tracking...")
 
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
 X = data.drop(columns=['Transported', "VIP", 'AgeGroup', 'NoSpend', 'SoloTraveler', 'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep'])
