@@ -23,7 +23,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mlflow scikit-learn pandas
+          pip install mlflow==2.22.2
+          pip install scikit-learn pandas
           pip install xgboost lightgbm catboost matplotlib seaborn joblib
           
       - name: Run mlflow project
