@@ -16,6 +16,10 @@ import joblib
 import time
 import os
 
+os.environ['MLFLOW_TRACKING_URI'] = 'file:./mlruns'
+mlflow.set_tracking_uri('file:./mlruns')
+print(f"MLflow Tracking URI: {mlflow.get_tracking_uri()}")
+
 time.sleep(0.5)
 
 active_run = mlflow.active_run()
@@ -23,12 +27,12 @@ active_run = mlflow.active_run()
 if active_run is None:
     print("No active run detected, starting new run...")
 
-    mlflow.sklearn.autolog(
-        log_input_examples=False,
-        log_model_signatures=False,
-        log_models=False,
-        silent=True  
-    )
+mlflow.sklearn.autolog(
+    log_input_examples=False,
+    log_model_signatures=False,
+    log_models=False,
+    silent=True  
+)
 
 print("\nLoading data...")
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
