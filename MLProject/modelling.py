@@ -16,23 +16,12 @@ import joblib
 import time
 import os
 
-try:
-    import dagshub
-    dagshub.init(repo_owner='Rqwannn', repo_name='SpaceShip_Titanic_Pipeline', mlflow=True)
-    mlflow.set_tracking_uri("https://dagshub.com/Rqwannn/SpaceShip_Titanic_Pipeline.mlflow/")
-    print("DagHub tracking initialized")
-    USE_DAGSHUB = True
-except Exception as e:
-    print(f"DagHub init failed, using local tracking")
-    USE_DAGSHUB = False
-
 time.sleep(0.5)
 
 active_run = mlflow.active_run()
+
 if active_run is None:
     print("No active run detected, starting new run...")
-    mlflow.start_run()
-    active_run = mlflow.active_run()
 
 run_id = mlflow.active_run().info.run_id
 print(f"Active run ID: {run_id}")
