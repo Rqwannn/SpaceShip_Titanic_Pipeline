@@ -24,6 +24,8 @@ dvc gc -w
 
 ## Pertanyaan & Saran
 
+Kurangnya flexibilitas menggunakan MLproject di Kriteria 1 dan 3
+
 - Kenapa harus pakai MLproject?
 - kenapa ga langsung manual custom agar lebih flexible
 - seperti langsung execute python main.py
@@ -41,4 +43,11 @@ Saran
 - Coba kalau custom Dockerfile lebih enak apalagi pake docker compose kan
 - lebih enak untuk kerja sama tim jika pakai Dagshub MLflow UI? jika langsung execute script tanpa mlflow.run bisa
 
-jujur ini ga tau script saya yang salah jika pakai MLproject atau tidak, tapi lebih mudah jika ga pakai menurut saya, mungkin saranya materinya bisa di sesuaikan kembali, pakai DVC lebih bagus jika tidak ada batasan stcruktur foldernya
+jujur ini ga tau script saya yang salah jika pakai MLproject atau tidak, tapi lebih mudah jika ga pakai menurut saya, mungkin saranya materinya bisa di sesuaikan kembali, pakai DVC lebih bagus jika tidak ada batasan stcruktur foldernya, terus CI/CD sangat bagus juga materinya, tapi saya rasa gasuka pakai MLproject karna kurangnya flexibilitas
+
+berikut si yang saya harapkan
+
+- CI/CD tanpa bergantung harus pakai MLproject
+- bisa pakai Dockerfile / docker compose
+- bisa menggunakan DVC
+- Dagshub dengan MLflow UI lebih baik untuk kerja sama tim pada tahap experiment

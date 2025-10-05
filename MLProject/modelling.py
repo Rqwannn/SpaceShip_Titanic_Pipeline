@@ -84,26 +84,15 @@ with mlflow.start_run() as run:
 
     print("Performing Hyperparameter Tuning...")
 
-    # param_grid = {
-    #     'xgb__n_estimators': [100, 200],
-    #     'xgb__max_depth': [3, 5, 7],
-    #     'xgb__learning_rate': [0.01, 0.1],
-    #     'lgbm__n_estimators': [100, 200],
-    #     'lgbm__max_depth': [3, 5],
-    #     'cat__iterations': [100, 200],
-    #     'cat__depth': [4, 6]
-    # }
-
     param_grid = {
-        'xgb__n_estimators': [50],
-        'xgb__max_depth': [3],
-        'xgb__learning_rate': [0.1],
-        'lgbm__n_estimators': [50],
-        'lgbm__max_depth': [3],
-        'cat__iterations': [50],
-        'cat__depth': [4]
+        'xgb__n_estimators': [100, 200],
+        'xgb__max_depth': [3, 5, 7],
+        'xgb__learning_rate': [0.01, 0.1],
+        'lgbm__n_estimators': [100, 200],
+        'lgbm__max_depth': [3, 5],
+        'cat__iterations': [100, 200],
+        'cat__depth': [4, 6]
     }
-
 
     grid_search = GridSearchCV(
         estimator=stack,
