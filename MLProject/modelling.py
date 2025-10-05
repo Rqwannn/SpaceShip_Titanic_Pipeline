@@ -209,7 +209,7 @@ with mlflow.start_run() as run:
     registered_model_name = "Spaceship_Titanic_StackingModel"
     print(f"\nRegistering model: {registered_model_name}")
 
-    model_uri = f"runs:/{run_id}/model"
+    model_uri = f"runs:/{run.info.run_id}/model"
 
     try:
         mv = mlflow.register_model(
@@ -231,7 +231,7 @@ with mlflow.start_run() as run:
     print("VERIFYING ARTIFACTS")
     print("="*60)
 
-    artifacts_dir = f"mlruns/0/{run_id}/artifacts"
+    artifacts_dir = f"mlruns/0/{run.info.run_id}/artifacts"
     if os.path.exists(artifacts_dir):
         artifacts = os.listdir(artifacts_dir)
         print(f"Artifacts in run: {', '.join(artifacts)}")
