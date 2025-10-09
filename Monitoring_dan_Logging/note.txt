@@ -1,3 +1,7 @@
-Index(['HomePlanet', 'Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa',
-       'VRDeck', 'Deck', 'CabinNum', 'Side', 'TotalSpend'],
-      dtype='object')
+docker-compose up --build -d
+
+docker ps
+
+docker-compose logs -f prometheus_exporter
+
+streamlit run inference.py

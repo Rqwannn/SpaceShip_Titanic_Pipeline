@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+prometheus-client
+httpx
+pandas
+psutil
+streamlit
+scikit-learn
+joblib

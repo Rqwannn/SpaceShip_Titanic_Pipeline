@@ -1,0 +1,56 @@
+version: '3.8'
+
+volumes:
+  grafana-storage:
+  preprocessor_artifacts_vol: 
+
+services:
+  preprocessor-artifacts:
+    image: rqwannn/spaceship_titanic_preprocessor:latest
+    container_name: preprocessor-artifacts-provider
+    volumes:
+      - preprocessor_artifacts_vol:/artifacts/local # 
+    command: tail -f /dev/null 
+
+  ml_model:
+    image: rqwannn/spaceship_titanic_modelling:latest
+    container_name: spaceship-model
+    ports:
+      - "8080:8080"
+    command: mlflow models serve -m /opt/ml/model -h 0.0.0.0 -p 8080 --no-conda
+
+  prometheus_exporter:
+    build: .
+    container_name: model-exporter
+    ports:
+      - "8001:8001"
+    volumes:
+      - preprocessor_artifacts_vol:/app/artifacts 
+    depends_on:
+      - ml_model
+      - preprocessor-artifacts 
+    environment:
+      - MODEL_URI=http://ml_model:8080/invocations
+      - ARTIFACTS_PATH=/app/artifacts
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - prometheus_exporter
+
+  grafana:
+    image: grafana/grafana-oss:9.5.3
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - prometheus
