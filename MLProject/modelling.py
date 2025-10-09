@@ -39,7 +39,7 @@ with mlflow.start_run() as run:
     print("\nLoading data...")
     data = pd.read_csv("spaceship_titanic_preprocessing.csv")
     X = data.drop(columns=['Transported', "VIP", 'AgeGroup', 'NoSpend', 'SoloTraveler', 
-                        'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep'])
+                        'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep', 'Unnamed: 0'])
     y = data['Transported']
 
     def clean_column_names(df):
@@ -51,6 +51,7 @@ with mlflow.start_run() as run:
     X = X.astype('float64')
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
+
     print(f"Train size: {len(X_train)}, Test size: {len(X_test)}")
 
     def create_report(y_true, y_pred, dataset_name="Dataset"):
