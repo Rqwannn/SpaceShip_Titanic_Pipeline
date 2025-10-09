@@ -245,18 +245,21 @@ def preprocess_data(input_path: Text = "data.csv", output_dir: Text = "output"):
         print("Rekayasa fitur selesai.")
 
         print("\n=== TAHAP 5: NORMALISASI DAN ENCODING ===")
-        df_train.drop(columns=["PassengerId", "GroupId", "Name", "Cabin"], inplace=True)
+        df_train.drop(columns=['Transported', "VIP", 'AgeGroup', 'NoSpend', 'SoloTraveler', 'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep'], inplace=True)
         
-        numeric_cols_to_scale = ["Age", "RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck", "NoSpend", "TotalSpend", "CabinNum", "SoloTraveler", "GroupSize"]
+        numeric_cols_to_scale = ['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'CabinNum', 'TotalSpend', 'Age', 'VRDeck']
         scalers = {}
+
         for col in numeric_cols_to_scale:
             df_train[col] = np.log1p(df_train[col])
             scaler = RobustScaler()
             df_train[col] = scaler.fit_transform(df_train[[col]])
             scalers[col] = scaler
 
-        categorical_cols_to_encode = [col for col in df_train.columns if df_train[col].dtype == 'object' or pd.api.types.is_categorical_dtype(df_train[col])]
+        categorical_cols_to_encode = ['HomePlanet', 'Deck', 'Side']
+        
         label_encoders = {}
+
         for col in categorical_cols_to_encode:
             encoder = LabelEncoder()
             df_train[col] = encoder.fit_transform(df_train[col].astype(str))
