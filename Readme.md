@@ -21,3 +21,9 @@ dvc cache purge
 dvc gc -w
 
 ```
+
+## Locust Command
+
+```Bash
+locust -f locust.py     
+```

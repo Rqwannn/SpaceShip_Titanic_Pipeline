@@ -6,7 +6,7 @@ class MLModelUser(HttpUser):
     User class that simulates requests to the ML model monitoring service.
     It tests both the prediction endpoint and the health check endpoint.
     """
-    host = "http://localhost:8000"
+    host = "http://localhost:8001"
     
     wait_time = between(0.5, 2.5)
 
