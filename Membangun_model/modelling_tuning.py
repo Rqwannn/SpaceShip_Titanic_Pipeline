@@ -25,8 +25,6 @@ except Exception as e:
     print(f"Warning: Failed to initialize DagHub: {e}")
     print("Using local MLflow tracking")
     
-mlflow.set_experiment("Spaceship Titanic Modeling")
-
 data = pd.read_csv("spaceship_titanic_preprocessing.csv")
 X = data.drop(columns=['Transported', "VIP", 'AgeGroup', 'NoSpend', 'SoloTraveler', 'GroupSize', 'Name', 'Destination', 'Cabin', 'CryoSleep'])
 y = data['Transported']
@@ -56,7 +54,18 @@ def create_report(y_true, y_pred, dataset_name="Dataset"):
     
     return accuracy, cer
 
-with mlflow.start_run() as run:
+mlflow.set_experiment("Spaceship Titanic Modeling")
+
+# experiment_name = "Spaceship Titanic Modeling"
+
+# try:
+#     experiment_id = mlflow.create_experiment(experiment_name)
+# except:
+#     experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
+
+# mlflow.set_experiment(experiment_name)
+
+with mlflow.start_run(run_name="Stack Classifier with Hyperparameter Tuning") as run:
     mlflow.sklearn.autolog(
         log_input_examples=True,
         log_model_signatures=True,
